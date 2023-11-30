@@ -12,7 +12,7 @@ const Connect: React.FC<Props> = ({ setError, setConnected }) => {
 	const [account, setAccount] = useState<JSX.Element>();
 
 	const connect = async () => {
-		const { signer, error } = await getSigner();
+		const { signer, provider, error } = await getSigner();
 
 		if (error) {
 			setError(error);
@@ -20,13 +20,15 @@ const Connect: React.FC<Props> = ({ setError, setConnected }) => {
 			setSigner(signer);
 			setConnected(true);
 
+			const chainId = (await provider.getNetwork()).chainId;
+
 			const {
 				name,
 				// description,
 				profileImageUrl,
 				// profileBackgroundImageUrl,
 				error: fetchError,
-			} = await getUniversalProfileData(signer.address);
+			} = await getUniversalProfileData(signer.address, Number(chainId));
 
 			if (fetchError) {
 				setError(

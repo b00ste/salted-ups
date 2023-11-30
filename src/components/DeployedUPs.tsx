@@ -1,7 +1,9 @@
 import { Suspense, useEffect, useState } from 'react';
+import { concat, toBeHex, toNumber } from 'ethers';
 
-// component
+// components
 import Import from './Import';
+import UniversalProfileCard from './UniversalProfileCard';
 
 // utils
 import { getSigner } from '../helpers/utils';
@@ -18,8 +20,6 @@ import {
 	SaltedUniversalProfileFactory,
 	SaltedUniversalProfileFactory__factory,
 } from '../types';
-import UniversalProfileCard from './UniversalProfileCard';
-import { AbiCoder, concat, toBeHex, toNumber } from 'ethers';
 
 interface Props {
 	connected: boolean;
@@ -46,10 +46,17 @@ const DeployedUPs: React.FC<Props> = ({ connected, setError }) => {
 						.attach(SALTED_UP_FACTORY_ADDRESS)
 						.connect(signer) as SaltedUniversalProfileFactory;
 
-				const deployedUnviersalProfilesCount = toNumber(
+				const deployedUnviersalProfilesDataValue =
 					await saltedUniversalProfileFactory.getData(
 						DEPLOYED_SALTED_UP_ARRAY_KEY
-					)
+					);
+
+				if (deployedUnviersalProfilesDataValue === '0x') {
+					return;
+				}
+
+				const deployedUnviersalProfilesCount = toNumber(
+					deployedUnviersalProfilesDataValue
 				);
 
 				const newDeployedUniversalProfiles: string[] = [];
@@ -71,17 +78,29 @@ const DeployedUPs: React.FC<Props> = ({ connected, setError }) => {
 						await saltedUniversalProfileFactory.getData(
 							concat([
 								DEPLOYED_SALTED_UP_ARRAY_MAP_PREFIX,
+								'0x0000',
 								deployedUniversalProfile,
 							])
 						);
 
-					const [unviersalProfileOwner, universalProfileExported] =
-						new AbiCoder().decode(
-							['address', 'bool'],
-							deployedUniversalProfileMap
-						);
-					console.log(unviersalProfileOwner);
-					console.log(universalProfileExported);
+					const unviersalProfileOwner =
+						deployedUniversalProfileMap.substring(0, 42);
+					const universalProfileExported =
+						deployedUniversalProfileMap.substring(42) === '01'
+							? true
+							: false;
+
+					if (unviersalProfileOwner === signerAddress.toLowerCase()) {
+						if (universalProfileExported) {
+							newExportedUniversalProfiles.push(
+								deployedUniversalProfile
+							);
+						} else {
+							newDeployedUniversalProfiles.push(
+								deployedUniversalProfile
+							);
+						}
+					}
 				}
 
 				setDeployedUniversalProfiles(newDeployedUniversalProfiles);
@@ -100,21 +119,20 @@ const DeployedUPs: React.FC<Props> = ({ connected, setError }) => {
 				<UniversalProfileCard
 					key={universalProfileAddress}
 					universalProfileAddress={universalProfileAddress}
+					chainId={4201}
 				>
-					{exportedUniversalProfiles?.includes(
-						universalProfileAddress
-					) ? (
-						<p className="mt-6 text-center">
-							Universal Profile was already imported to a Browser
-							Extension
-						</p>
-					) : (
-						<Import
-							setError={setError}
-							universalProfileAddress={universalProfileAddress}
-						/>
-					)}
+					<Import
+						setError={setError}
+						universalProfileAddress={universalProfileAddress}
+					/>
 				</UniversalProfileCard>
+			))}
+			{exportedUniversalProfiles?.map((universalProfileAddress) => (
+				<UniversalProfileCard
+					key={universalProfileAddress}
+					universalProfileAddress={universalProfileAddress}
+					chainId={4201}
+				/>
 			))}
 		</Suspense>
 	);

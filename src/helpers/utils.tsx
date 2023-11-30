@@ -1,5 +1,5 @@
 import { BrowserProvider } from 'ethers';
-import { UNIVERSAL_PROFILE_API_MAINNET } from './constants';
+import { UNIVERSAL_PROFILE_API } from './constants';
 
 export const getCsv = async (fileName: string) => {
 	let data;
@@ -92,8 +92,10 @@ export const getSigner = async () => {
 export type Result = {
 	name?: string;
 	description?: string;
+	links?: Record<number, { title: string; url: string }>;
+	tags?: Record<number, string>;
 	profileImageUrl?: string;
-	profileBackgroundImageUrl?: string;
+	backgroundImageUrl?: string;
 	error?: string;
 };
 
@@ -102,9 +104,12 @@ export type Info = { promise?: Promise<Result>; result?: Result };
 const hashedProfiles: Record<string, Info> = {};
 
 export const getUniversalProfileData = (
-	universalProfileAddress: string
+	universalProfileAddress: string,
+	chainId: number
 ): Promise<Result> => {
-	return fetch(UNIVERSAL_PROFILE_API_MAINNET + universalProfileAddress)
+	return fetch(
+		UNIVERSAL_PROFILE_API + chainId + '/address/' + universalProfileAddress
+	)
 		.then((response) => {
 			if (!response.ok) {
 				return {
@@ -115,22 +120,28 @@ export const getUniversalProfileData = (
 		})
 		.then(
 			({
-				LSP3Profile: { name = '', description = '' } = {},
+				LSP3Profile: {
+					name = '',
+					description = '',
+					links = {},
+					tags = {},
+				} = {},
 				profileImageUrl = '',
-				profileBackgroundImageUrl = '',
-			}) => {
-				return {
-					name,
-					description,
-					profileImageUrl,
-					profileBackgroundImageUrl,
-				};
-			}
+				backgroundImageUrl = '',
+			}) => ({
+				name,
+				description,
+				links,
+				tags,
+				profileImageUrl,
+				backgroundImageUrl,
+			})
 		);
 };
 
 export const useUniversalProfileData = (
-	universalProfileAddress: string
+	universalProfileAddress: string,
+	chainId: number
 ): Result => {
 	let info: Info = hashedProfiles[universalProfileAddress];
 	if (info) {
@@ -139,7 +150,7 @@ export const useUniversalProfileData = (
 		}
 		return info.result || {};
 	}
-	const promise = getUniversalProfileData(universalProfileAddress);
+	const promise = getUniversalProfileData(universalProfileAddress, chainId);
 	info = hashedProfiles[universalProfileAddress] = {
 		promise,
 	};

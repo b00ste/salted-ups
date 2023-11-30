@@ -13,7 +13,7 @@ interface Props {
 
 const Import: React.FC<Props> = ({ universalProfileAddress, setError }) => {
 	const [newController, setNewController] = useState<string>();
-	const [success, setSuccsess] = useState(false);
+	const [success, setSuccess] = useState(false);
 
 	const getUniversalProfileController = async () => {
 		const { provider, error } = await getSigner();
@@ -98,7 +98,7 @@ const Import: React.FC<Props> = ({ universalProfileAddress, setError }) => {
 				`https://explorer.execution.mainnet.lukso.network/tx/${tx.hash}`
 			);
 
-			setSuccsess(true);
+			setSuccess(true);
 		} catch (error: any) {
 			if (error.message.startsWith('user rejected action')) {
 				setError(
