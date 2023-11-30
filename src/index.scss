@@ -1,5 +1,19 @@
 $font-file-path: '/assets/fonts';
-@import '@lukso/web-components/tools/sass/main.scss';
+// @import '@lukso/web-components/tools/sass/main.scss';
+
+// @import '@lukso/web-components/tools/sass/typography';
+@import '@lukso/web-components/tools/sass/colors';
+@import '@lukso/web-components/tools/sass/fonts';
+@import '@lukso/web-components/tools/sass/utilities';
+@import '@lukso/web-components/tools/sass/variables';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+strong {
+	@apply font-600;
+}
 
 body {
 	margin: 0;
