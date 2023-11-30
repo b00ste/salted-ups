@@ -1,6 +1,32 @@
 import { BrowserProvider } from 'ethers';
 import { UNIVERSAL_PROFILE_API_MAINNET } from './constants';
 
+export const getCsv = async (fileName: string) => {
+	let data;
+	try {
+		const response = await fetch(`data/${fileName}.csv`);
+
+		if (response.body) {
+			const reader = response.body.getReader();
+			const result = await reader.read();
+			const decoder = new TextDecoder('utf-8');
+			const csv = decoder.decode(result.value).split('\n').slice(1);
+
+			const newData: Record<string, string> = {};
+			csv.filter((value) => value !== '').forEach((value) => {
+				const [salt, address] = value.split(',');
+				newData[address] = salt;
+			});
+
+			data = newData;
+		}
+	} catch (error: any) {
+		console.log(error.message);
+	}
+
+	return data;
+};
+
 export const getSigner = async () => {
 	if (!window.lukso) {
 		return {

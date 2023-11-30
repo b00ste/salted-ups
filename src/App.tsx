@@ -22,7 +22,6 @@ function App() {
 				<lukso-card variant="basic" size="medium">
 					<div slot="content" className="p-6">
 						<Select
-							connected={connected}
 							setError={setError}
 							saltedUniversalProfile={saltedUniversalProfile}
 							setSaltedUniversalProfile={

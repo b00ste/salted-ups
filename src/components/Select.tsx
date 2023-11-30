@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { ZeroAddress, isHexString } from 'ethers';
+import { getCsv } from '../helpers/utils';
 
 interface Props {
-	connected: boolean;
 	setError: React.Dispatch<React.SetStateAction<JSX.Element | undefined>>;
 	saltedUniversalProfile:
 		| {
@@ -22,7 +22,6 @@ interface Props {
 }
 
 const Select: React.FC<Props> = ({
-	connected,
 	setError,
 	saltedUniversalProfile,
 	setSaltedUniversalProfile,
@@ -37,33 +36,7 @@ const Select: React.FC<Props> = ({
 	const [success, setSuccess] = useState<boolean>();
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await fetch('data/found_salts_0x0000.csv');
-
-				if (response.body) {
-					const reader = response.body.getReader();
-					const result = await reader.read();
-					const decoder = new TextDecoder('utf-8');
-					const csv = decoder
-						.decode(result.value)
-						.split('\n')
-						.slice(1);
-
-					const newData: Record<string, string> = {};
-					csv.filter((value) => value !== '').forEach((value) => {
-						const [salt, address] = value.split(',');
-						newData[address] = salt;
-					});
-
-					setData(newData);
-				}
-			} catch (error: any) {
-				console.log(error.message);
-			}
-		};
-
-		fetchData();
+		getCsv('found_salts_0x0000').then((newData) => setData(newData));
 	}, []);
 
 	const selectSalt = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -107,16 +80,16 @@ const Select: React.FC<Props> = ({
 
 	const saltSuggestions = (event: React.FormEvent<HTMLInputElement>) => {
 		const suggestions = Object.getOwnPropertyNames(data);
-		const userInput = event.currentTarget.value;
+		const userInput = event.currentTarget.value.toLowerCase();
 
 		if (success) {
 			setSuccess(false);
 		}
 
 		if (userInput) {
-			const filteredSuggestions = suggestions.filter((value) =>
-				value.toLowerCase().startsWith(userInput.toLowerCase())
-			);
+			const filteredSuggestions = suggestions.filter((value) => {
+				return value.toLowerCase().startsWith(userInput.toLowerCase());
+			});
 
 			setAutocomplete({
 				activeSuggestion: 0,

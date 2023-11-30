@@ -7,7 +7,11 @@ import Import from './Import';
 import { getSigner } from '../helpers/utils';
 
 // constants
-import { SALTED_UP_FACTORY_ADDRESS } from '../helpers/constants';
+import {
+	DEPLOYED_SALTED_UP_ARRAY_KEY,
+	DEPLOYED_SALTED_UP_ARRAY_MAP_PREFIX,
+	SALTED_UP_FACTORY_ADDRESS,
+} from '../helpers/constants';
 
 // types
 import {
@@ -15,6 +19,7 @@ import {
 	SaltedUniversalProfileFactory__factory,
 } from '../types';
 import UniversalProfileCard from './UniversalProfileCard';
+import { AbiCoder, concat, toBeHex, toNumber } from 'ethers';
 
 interface Props {
 	connected: boolean;
@@ -41,22 +46,51 @@ const DeployedUPs: React.FC<Props> = ({ connected, setError }) => {
 						.attach(SALTED_UP_FACTORY_ADDRESS)
 						.connect(signer) as SaltedUniversalProfileFactory;
 
-				const newDeployedUniversalProfiles =
-					await saltedUniversalProfileFactory.getDeployedUniversalProfiles(
-						signerAddress
-					);
-				setDeployedUniversalProfiles(newDeployedUniversalProfiles);
+				const deployedUnviersalProfilesCount = toNumber(
+					await saltedUniversalProfileFactory.getData(
+						DEPLOYED_SALTED_UP_ARRAY_KEY
+					)
+				);
 
-				const newExportedUniversalProfiles =
-					await saltedUniversalProfileFactory.getExportedUniversalProfiles(
-						signerAddress
-					);
+				const newDeployedUniversalProfiles: string[] = [];
+				const newExportedUniversalProfiles: string[] = [];
+				for (
+					let index = 0;
+					index < deployedUnviersalProfilesCount;
+					index++
+				) {
+					const deployedUniversalProfile =
+						await saltedUniversalProfileFactory.getData(
+							concat([
+								DEPLOYED_SALTED_UP_ARRAY_KEY.substring(0, 34),
+								toBeHex(index, 16),
+							])
+						);
+
+					const deployedUniversalProfileMap =
+						await saltedUniversalProfileFactory.getData(
+							concat([
+								DEPLOYED_SALTED_UP_ARRAY_MAP_PREFIX,
+								deployedUniversalProfile,
+							])
+						);
+
+					const [unviersalProfileOwner, universalProfileExported] =
+						new AbiCoder().decode(
+							['address', 'bool'],
+							deployedUniversalProfileMap
+						);
+					console.log(unviersalProfileOwner);
+					console.log(universalProfileExported);
+				}
+
+				setDeployedUniversalProfiles(newDeployedUniversalProfiles);
 				setExportedUniversalProfiles(newExportedUniversalProfiles);
 			}
 		};
 
 		if (connected) {
-			sortDeployedUniversalProfiles().then(() => {});
+			sortDeployedUniversalProfiles();
 		}
 	}, [connected, setError]);
 

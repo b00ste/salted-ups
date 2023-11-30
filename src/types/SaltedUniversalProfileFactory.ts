@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -25,54 +26,279 @@ import type {
 export interface SaltedUniversalProfileFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "RENOUNCE_OWNERSHIP_CONFIRMATION_DELAY"
+      | "RENOUNCE_OWNERSHIP_CONFIRMATION_PERIOD"
+      | "VERSION"
+      | "acceptOwnership"
+      | "batchCalls"
       | "changeMainController"
       | "deploy"
-      | "getDeployedUniversalProfiles"
-      | "getExportedUniversalProfiles"
-      | "getUniversalProfilesOwner"
+      | "execute"
+      | "executeBatch"
+      | "getData"
+      | "getDataBatch"
+      | "isValidSignature"
+      | "owner"
+      | "pendingOwner"
+      | "renounceOwnership"
+      | "setData"
+      | "setDataBatch"
+      | "supportsInterface"
+      | "transferOwnership"
+      | "universalReceiver"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
+      | "ContractCreated"
+      | "DataChanged"
+      | "Executed"
+      | "OwnershipRenounced"
+      | "OwnershipTransferStarted"
+      | "OwnershipTransferred"
+      | "RenounceOwnershipStarted"
       | "SaltedUniversalProfileDeployed"
       | "SaltedUniversalProfileExported"
+      | "UniversalReceiver"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "RENOUNCE_OWNERSHIP_CONFIRMATION_DELAY",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "RENOUNCE_OWNERSHIP_CONFIRMATION_PERIOD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "VERSION", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "acceptOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "batchCalls",
+    values: [BytesLike[]]
+  ): string;
   encodeFunctionData(
     functionFragment: "changeMainController",
     values: [AddressLike, AddressLike, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "deploy", values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "getDeployedUniversalProfiles",
+    functionFragment: "execute",
+    values: [BigNumberish, AddressLike, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "executeBatch",
+    values: [BigNumberish[], AddressLike[], BigNumberish[], BytesLike[]]
+  ): string;
+  encodeFunctionData(functionFragment: "getData", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "getDataBatch",
+    values: [BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isValidSignature",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "pendingOwner",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setData",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setDataBatch",
+    values: [BytesLike[], BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "getExportedUniversalProfiles",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getUniversalProfilesOwner",
-    values: [AddressLike]
+    functionFragment: "universalReceiver",
+    values: [BytesLike, BytesLike]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "RENOUNCE_OWNERSHIP_CONFIRMATION_DELAY",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "RENOUNCE_OWNERSHIP_CONFIRMATION_PERIOD",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "VERSION", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "acceptOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "batchCalls", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "changeMainController",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deploy", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getDeployedUniversalProfiles",
+    functionFragment: "executeBatch",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getData", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getDataBatch",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getExportedUniversalProfiles",
+    functionFragment: "isValidSignature",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "pendingOwner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getUniversalProfilesOwner",
+    functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setData", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setDataBatch",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "universalReceiver",
+    data: BytesLike
+  ): Result;
+}
+
+export namespace ContractCreatedEvent {
+  export type InputTuple = [
+    operationType: BigNumberish,
+    contractAddress: AddressLike,
+    value: BigNumberish,
+    salt: BytesLike
+  ];
+  export type OutputTuple = [
+    operationType: bigint,
+    contractAddress: string,
+    value: bigint,
+    salt: string
+  ];
+  export interface OutputObject {
+    operationType: bigint;
+    contractAddress: string;
+    value: bigint;
+    salt: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace DataChangedEvent {
+  export type InputTuple = [dataKey: BytesLike, dataValue: BytesLike];
+  export type OutputTuple = [dataKey: string, dataValue: string];
+  export interface OutputObject {
+    dataKey: string;
+    dataValue: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace ExecutedEvent {
+  export type InputTuple = [
+    operationType: BigNumberish,
+    target: AddressLike,
+    value: BigNumberish,
+    selector: BytesLike
+  ];
+  export type OutputTuple = [
+    operationType: bigint,
+    target: string,
+    value: bigint,
+    selector: string
+  ];
+  export interface OutputObject {
+    operationType: bigint;
+    target: string;
+    value: bigint;
+    selector: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OwnershipRenouncedEvent {
+  export type InputTuple = [];
+  export type OutputTuple = [];
+  export interface OutputObject {}
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OwnershipTransferStartedEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
+  export interface OutputObject {
+    previousOwner: string;
+    newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OwnershipTransferredEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
+  export interface OutputObject {
+    previousOwner: string;
+    newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RenounceOwnershipStartedEvent {
+  export type InputTuple = [];
+  export type OutputTuple = [];
+  export interface OutputObject {}
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace SaltedUniversalProfileDeployedEvent {
@@ -100,6 +326,34 @@ export namespace SaltedUniversalProfileExportedEvent {
   export interface OutputObject {
     deployer: string;
     universalProfileAddress: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace UniversalReceiverEvent {
+  export type InputTuple = [
+    from: AddressLike,
+    value: BigNumberish,
+    typeId: BytesLike,
+    receivedData: BytesLike,
+    returnedValue: BytesLike
+  ];
+  export type OutputTuple = [
+    from: string,
+    value: bigint,
+    typeId: string,
+    receivedData: string,
+    returnedValue: string
+  ];
+  export interface OutputObject {
+    from: string;
+    value: bigint;
+    typeId: string;
+    receivedData: string;
+    returnedValue: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -150,6 +404,28 @@ export interface SaltedUniversalProfileFactory extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  RENOUNCE_OWNERSHIP_CONFIRMATION_DELAY: TypedContractMethod<
+    [],
+    [bigint],
+    "view"
+  >;
+
+  RENOUNCE_OWNERSHIP_CONFIRMATION_PERIOD: TypedContractMethod<
+    [],
+    [bigint],
+    "view"
+  >;
+
+  VERSION: TypedContractMethod<[], [string], "view">;
+
+  acceptOwnership: TypedContractMethod<[], [void], "nonpayable">;
+
+  batchCalls: TypedContractMethod<
+    [data: BytesLike[]],
+    [string[]],
+    "nonpayable"
+  >;
+
   changeMainController: TypedContractMethod<
     [
       universalProfileAddress: AddressLike,
@@ -162,28 +438,97 @@ export interface SaltedUniversalProfileFactory extends BaseContract {
 
   deploy: TypedContractMethod<[salt: BytesLike], [string], "payable">;
 
-  getDeployedUniversalProfiles: TypedContractMethod<
-    [universalProfileAddress: AddressLike],
+  execute: TypedContractMethod<
+    [
+      operationType: BigNumberish,
+      target: AddressLike,
+      value: BigNumberish,
+      data: BytesLike
+    ],
+    [string],
+    "payable"
+  >;
+
+  executeBatch: TypedContractMethod<
+    [
+      operationsType: BigNumberish[],
+      targets: AddressLike[],
+      values: BigNumberish[],
+      datas: BytesLike[]
+    ],
+    [string[]],
+    "payable"
+  >;
+
+  getData: TypedContractMethod<[dataKey: BytesLike], [string], "view">;
+
+  getDataBatch: TypedContractMethod<
+    [dataKeys: BytesLike[]],
     [string[]],
     "view"
   >;
 
-  getExportedUniversalProfiles: TypedContractMethod<
-    [universalProfileAddress: AddressLike],
-    [string[]],
-    "view"
-  >;
-
-  getUniversalProfilesOwner: TypedContractMethod<
-    [universalProfileAddress: AddressLike],
+  isValidSignature: TypedContractMethod<
+    [dataHash: BytesLike, signature: BytesLike],
     [string],
     "view"
+  >;
+
+  owner: TypedContractMethod<[], [string], "view">;
+
+  pendingOwner: TypedContractMethod<[], [string], "view">;
+
+  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+
+  setData: TypedContractMethod<
+    [dataKey: BytesLike, dataValue: BytesLike],
+    [void],
+    "payable"
+  >;
+
+  setDataBatch: TypedContractMethod<
+    [dataKeys: BytesLike[], dataValues: BytesLike[]],
+    [void],
+    "payable"
+  >;
+
+  supportsInterface: TypedContractMethod<
+    [interfaceId: BytesLike],
+    [boolean],
+    "view"
+  >;
+
+  transferOwnership: TypedContractMethod<
+    [pendingNewOwner: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  universalReceiver: TypedContractMethod<
+    [typeId: BytesLike, receivedData: BytesLike],
+    [string],
+    "payable"
   >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "RENOUNCE_OWNERSHIP_CONFIRMATION_DELAY"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "RENOUNCE_OWNERSHIP_CONFIRMATION_PERIOD"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "VERSION"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "acceptOwnership"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "batchCalls"
+  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
   getFunction(
     nameOrSignature: "changeMainController"
   ): TypedContractMethod<
@@ -199,27 +544,128 @@ export interface SaltedUniversalProfileFactory extends BaseContract {
     nameOrSignature: "deploy"
   ): TypedContractMethod<[salt: BytesLike], [string], "payable">;
   getFunction(
-    nameOrSignature: "getDeployedUniversalProfiles"
+    nameOrSignature: "execute"
   ): TypedContractMethod<
-    [universalProfileAddress: AddressLike],
-    [string[]],
-    "view"
+    [
+      operationType: BigNumberish,
+      target: AddressLike,
+      value: BigNumberish,
+      data: BytesLike
+    ],
+    [string],
+    "payable"
   >;
   getFunction(
-    nameOrSignature: "getExportedUniversalProfiles"
+    nameOrSignature: "executeBatch"
   ): TypedContractMethod<
-    [universalProfileAddress: AddressLike],
+    [
+      operationsType: BigNumberish[],
+      targets: AddressLike[],
+      values: BigNumberish[],
+      datas: BytesLike[]
+    ],
     [string[]],
-    "view"
+    "payable"
   >;
   getFunction(
-    nameOrSignature: "getUniversalProfilesOwner"
+    nameOrSignature: "getData"
+  ): TypedContractMethod<[dataKey: BytesLike], [string], "view">;
+  getFunction(
+    nameOrSignature: "getDataBatch"
+  ): TypedContractMethod<[dataKeys: BytesLike[]], [string[]], "view">;
+  getFunction(
+    nameOrSignature: "isValidSignature"
   ): TypedContractMethod<
-    [universalProfileAddress: AddressLike],
+    [dataHash: BytesLike, signature: BytesLike],
     [string],
     "view"
   >;
+  getFunction(
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "pendingOwner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "renounceOwnership"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setData"
+  ): TypedContractMethod<
+    [dataKey: BytesLike, dataValue: BytesLike],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "setDataBatch"
+  ): TypedContractMethod<
+    [dataKeys: BytesLike[], dataValues: BytesLike[]],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "supportsInterface"
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "transferOwnership"
+  ): TypedContractMethod<[pendingNewOwner: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "universalReceiver"
+  ): TypedContractMethod<
+    [typeId: BytesLike, receivedData: BytesLike],
+    [string],
+    "payable"
+  >;
 
+  getEvent(
+    key: "ContractCreated"
+  ): TypedContractEvent<
+    ContractCreatedEvent.InputTuple,
+    ContractCreatedEvent.OutputTuple,
+    ContractCreatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "DataChanged"
+  ): TypedContractEvent<
+    DataChangedEvent.InputTuple,
+    DataChangedEvent.OutputTuple,
+    DataChangedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Executed"
+  ): TypedContractEvent<
+    ExecutedEvent.InputTuple,
+    ExecutedEvent.OutputTuple,
+    ExecutedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OwnershipRenounced"
+  ): TypedContractEvent<
+    OwnershipRenouncedEvent.InputTuple,
+    OwnershipRenouncedEvent.OutputTuple,
+    OwnershipRenouncedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OwnershipTransferStarted"
+  ): TypedContractEvent<
+    OwnershipTransferStartedEvent.InputTuple,
+    OwnershipTransferStartedEvent.OutputTuple,
+    OwnershipTransferStartedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OwnershipTransferred"
+  ): TypedContractEvent<
+    OwnershipTransferredEvent.InputTuple,
+    OwnershipTransferredEvent.OutputTuple,
+    OwnershipTransferredEvent.OutputObject
+  >;
+  getEvent(
+    key: "RenounceOwnershipStarted"
+  ): TypedContractEvent<
+    RenounceOwnershipStartedEvent.InputTuple,
+    RenounceOwnershipStartedEvent.OutputTuple,
+    RenounceOwnershipStartedEvent.OutputObject
+  >;
   getEvent(
     key: "SaltedUniversalProfileDeployed"
   ): TypedContractEvent<
@@ -234,8 +680,92 @@ export interface SaltedUniversalProfileFactory extends BaseContract {
     SaltedUniversalProfileExportedEvent.OutputTuple,
     SaltedUniversalProfileExportedEvent.OutputObject
   >;
+  getEvent(
+    key: "UniversalReceiver"
+  ): TypedContractEvent<
+    UniversalReceiverEvent.InputTuple,
+    UniversalReceiverEvent.OutputTuple,
+    UniversalReceiverEvent.OutputObject
+  >;
 
   filters: {
+    "ContractCreated(uint256,address,uint256,bytes32)": TypedContractEvent<
+      ContractCreatedEvent.InputTuple,
+      ContractCreatedEvent.OutputTuple,
+      ContractCreatedEvent.OutputObject
+    >;
+    ContractCreated: TypedContractEvent<
+      ContractCreatedEvent.InputTuple,
+      ContractCreatedEvent.OutputTuple,
+      ContractCreatedEvent.OutputObject
+    >;
+
+    "DataChanged(bytes32,bytes)": TypedContractEvent<
+      DataChangedEvent.InputTuple,
+      DataChangedEvent.OutputTuple,
+      DataChangedEvent.OutputObject
+    >;
+    DataChanged: TypedContractEvent<
+      DataChangedEvent.InputTuple,
+      DataChangedEvent.OutputTuple,
+      DataChangedEvent.OutputObject
+    >;
+
+    "Executed(uint256,address,uint256,bytes4)": TypedContractEvent<
+      ExecutedEvent.InputTuple,
+      ExecutedEvent.OutputTuple,
+      ExecutedEvent.OutputObject
+    >;
+    Executed: TypedContractEvent<
+      ExecutedEvent.InputTuple,
+      ExecutedEvent.OutputTuple,
+      ExecutedEvent.OutputObject
+    >;
+
+    "OwnershipRenounced()": TypedContractEvent<
+      OwnershipRenouncedEvent.InputTuple,
+      OwnershipRenouncedEvent.OutputTuple,
+      OwnershipRenouncedEvent.OutputObject
+    >;
+    OwnershipRenounced: TypedContractEvent<
+      OwnershipRenouncedEvent.InputTuple,
+      OwnershipRenouncedEvent.OutputTuple,
+      OwnershipRenouncedEvent.OutputObject
+    >;
+
+    "OwnershipTransferStarted(address,address)": TypedContractEvent<
+      OwnershipTransferStartedEvent.InputTuple,
+      OwnershipTransferStartedEvent.OutputTuple,
+      OwnershipTransferStartedEvent.OutputObject
+    >;
+    OwnershipTransferStarted: TypedContractEvent<
+      OwnershipTransferStartedEvent.InputTuple,
+      OwnershipTransferStartedEvent.OutputTuple,
+      OwnershipTransferStartedEvent.OutputObject
+    >;
+
+    "OwnershipTransferred(address,address)": TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
+    OwnershipTransferred: TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
+
+    "RenounceOwnershipStarted()": TypedContractEvent<
+      RenounceOwnershipStartedEvent.InputTuple,
+      RenounceOwnershipStartedEvent.OutputTuple,
+      RenounceOwnershipStartedEvent.OutputObject
+    >;
+    RenounceOwnershipStarted: TypedContractEvent<
+      RenounceOwnershipStartedEvent.InputTuple,
+      RenounceOwnershipStartedEvent.OutputTuple,
+      RenounceOwnershipStartedEvent.OutputObject
+    >;
+
     "SaltedUniversalProfileDeployed(address,address)": TypedContractEvent<
       SaltedUniversalProfileDeployedEvent.InputTuple,
       SaltedUniversalProfileDeployedEvent.OutputTuple,
@@ -256,6 +786,17 @@ export interface SaltedUniversalProfileFactory extends BaseContract {
       SaltedUniversalProfileExportedEvent.InputTuple,
       SaltedUniversalProfileExportedEvent.OutputTuple,
       SaltedUniversalProfileExportedEvent.OutputObject
+    >;
+
+    "UniversalReceiver(address,uint256,bytes32,bytes,bytes)": TypedContractEvent<
+      UniversalReceiverEvent.InputTuple,
+      UniversalReceiverEvent.OutputTuple,
+      UniversalReceiverEvent.OutputObject
+    >;
+    UniversalReceiver: TypedContractEvent<
+      UniversalReceiverEvent.InputTuple,
+      UniversalReceiverEvent.OutputTuple,
+      UniversalReceiverEvent.OutputObject
     >;
   };
 }

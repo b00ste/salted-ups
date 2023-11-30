@@ -7,6 +7,7 @@ import {
 	SaltedUniversalProfileFactory__factory,
 } from '../types';
 import { getSigner } from '../helpers/utils';
+import { parseEther } from 'ethers';
 
 interface Props {
 	setError: React.Dispatch<React.SetStateAction<JSX.Element | undefined>>;
@@ -45,7 +46,9 @@ const Deploy: React.FC<Props> = ({ setError, saltedUniversalProfile }) => {
 				.connect(signer) as SaltedUniversalProfileFactory;
 
 			try {
-				const tx = await factory.deploy(saltedUniversalProfile.salt);
+				const tx = await factory.deploy(saltedUniversalProfile.salt, {
+					value: parseEther('1'),
+				});
 
 				console.log(
 					`https://explorer.execution.mainnet.lukso.network/tx/${tx.hash}`
